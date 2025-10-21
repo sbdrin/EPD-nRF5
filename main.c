@@ -36,7 +36,6 @@
 #include "app_timer.h"
 #include "app_scheduler.h"
 #include "nrf_drv_gpiote.h"
-#include "nrf_drv_wdt.h"
 #include "nrf_pwr_mgmt.h"
 #include "EPD_service.h"
 #include "main.h"
@@ -97,7 +96,6 @@ static ble_uuid_t                        m_adv_uuids[] = {{BLE_UUID_EPD_SVC, \
 BLE_EPD_DEF(m_epd);                                                                     /**< Structure to identify the EPD Service. */
 static uint32_t                          m_timestamp = 1735689600;                      /**< Current timestamp. */
 APP_TIMER_DEF(m_clock_timer_id);                                                        /**< Clock timer. */
-static nrf_drv_wdt_channel_id            m_wdt_channel_id;
 static uint32_t                          m_wdt_last_feed_time = 0;
 static uint32_t                          m_resetreas;
 
@@ -134,11 +132,6 @@ void set_timestamp(uint32_t timestamp)
 // reload the wdt channel
 void app_feed_wdt(void)
 {
-    if (m_timestamp - m_wdt_last_feed_time >= 30) {
-        NRF_LOG_DEBUG("Feed WDT\n");
-        nrf_drv_wdt_channel_feed(m_wdt_channel_id);
-        m_wdt_last_feed_time = m_timestamp;
-    }
 }
 
 #if defined(S112)
@@ -732,8 +725,6 @@ static void power_management_init(void)
  */
 static void idle_state_handle(void)
 {
-    app_feed_wdt();
-
     if (NRF_LOG_PROCESS() == false)
         nrf_pwr_mgmt_run();
 }
@@ -743,9 +734,6 @@ static void idle_state_handle(void)
  */
 void wdt_event_handler(void)
 {
-    //NOTE: The max amount of time we can spend in WDT interrupt is two cycles of 32768[Hz] clock - after that, reset occurs
-    NRF_LOG_ERROR("WDT Rest!\r\n");
-    NRF_LOG_FINAL_FLUSH();
 }
 
 /**@brief Function for application main entry.
@@ -760,12 +748,6 @@ int main(void)
     NRF_LOG_DEBUG("== RESET REASON: %d ===\n", m_resetreas);
 
     NRF_LOG_DEBUG("init..\n");
-
-    // Configure WDT.
-    nrf_drv_wdt_config_t config = NRF_DRV_WDT_DEAFULT_CONFIG;
-    APP_ERROR_CHECK(nrf_drv_wdt_init(&config, wdt_event_handler));
-    APP_ERROR_CHECK(nrf_drv_wdt_channel_alloc(&m_wdt_channel_id));
-    nrf_drv_wdt_enable();
 
     timers_init();
     power_management_init();
