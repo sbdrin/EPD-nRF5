@@ -544,11 +544,6 @@
               <FileType>1</FileType>
               <FilePath>..\SDK\17.1.0_ddde560\modules\nrfx\drivers\src\nrfx_spim.c</FilePath>
             </File>
-            <File>
-              <FileName>nrfx_wdt.c</FileName>
-              <FileType>1</FileType>
-              <FilePath>..\SDK\17.1.0_ddde560\modules\nrfx\drivers\src\nrfx_wdt.c</FilePath>
-            </File>
           </Files>
         </Group>
         <Group>
@@ -1300,11 +1295,6 @@
               <FileName>nrfx_spim.c</FileName>
               <FileType>1</FileType>
               <FilePath>..\SDK\17.1.0_ddde560\modules\nrfx\drivers\src\nrfx_spim.c</FilePath>
-            </File>
-            <File>
-              <FileName>nrfx_wdt.c</FileName>
-              <FileType>1</FileType>
-              <FilePath>..\SDK\17.1.0_ddde560\modules\nrfx\drivers\src\nrfx_wdt.c</FilePath>
             </File>
           </Files>
         </Group>
