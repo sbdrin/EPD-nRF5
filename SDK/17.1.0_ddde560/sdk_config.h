@@ -5369,7 +5369,7 @@
 // <e> WDT_ENABLED - nrf_drv_wdt - WDT peripheral driver - legacy layer
 //==========================================================
 #ifndef WDT_ENABLED
-#define WDT_ENABLED 1
+#define WDT_ENABLED 0
 #endif
 // <o> WDT_CONFIG_BEHAVIOUR  - WDT behavior in CPU SLEEP or HALT mode
  
